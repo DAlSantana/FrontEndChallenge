@@ -1,22 +1,21 @@
-import { Injectable } from "@angular/core";
-import { Observable, Subject } from "rxjs";
-import { ChartDto } from "src/models/chartDto";
-import { Interval } from "src/models/interval.enum";
-import { Range } from "src/models/range.enum";
-import { TimeConverter } from "src/utils/timeConverter";
-import { ProxyService } from "../proxy/proxy.service";
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { ChartDto } from 'src/models/chartDto';
+import { Interval } from 'src/models/interval.enum';
+import { Range } from 'src/models/range.enum';
+import { TimeConverter } from 'src/utils/timeConverter';
+import { ProxyService } from '../proxy/proxy.service';
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AdapterSetvice {
-  private data: any;
-
   subject = new Subject<any>();
   subJectDto = new Subject<ChartDto>();
   constructor(
     private proxyService: ProxyService,
     private timeConverterService: TimeConverter
   ) {}
+
   public getStockValues(stock: string, interval: Interval, range: Range) {
     this.proxyService
       .consultStockVaration(stock, interval, range)
@@ -25,21 +24,20 @@ export class AdapterSetvice {
       });
     return this.converterchartServiceToChartDto();
   }
+
   public converterchartServiceToChartDto(): Observable<ChartDto> {
-    let chartDto: any;
     this.subject.subscribe((sub: any) => {
-      let dateFormated: any = [];
+      let datesFormated: any = [];
       sub.chart.result[0].timestamp.forEach((timeUnformated: number) =>
-        dateFormated.push(
+        datesFormated.push(
           this.timeConverterService.convertTimeSteampToBrazilianDateTime(
             timeUnformated
           )
         )
       );
-      console.log(sub.chart);
-      chartDto = new ChartDto(
+      let chartDto = new ChartDto(
         sub.chart.result[0].indicators.quote[0].open,
-        dateFormated
+        datesFormated
       );
       this.subJectDto.next(chartDto);
     });

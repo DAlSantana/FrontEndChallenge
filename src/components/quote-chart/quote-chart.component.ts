@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ChartDto } from 'src/models/chartDto';
 @Component({
@@ -7,16 +7,18 @@ import { ChartDto } from 'src/models/chartDto';
   styleUrls: ['./quote-chart.component.scss'],
 })
 export class QuoteChartComponent {
-  @Input() chartData: any;
+  @Input() chartData: ChartDto;
 
-  @ViewChild('meuCanvas', { static: true }) elemento = {} as ElementRef;
+  @ViewChild('canvas', { static: true }) element = {} as ElementRef;
 
   constructor() {}
 
-  public ngOnInit() {}
+  public ngOnInit() {
+    this.createLineChart();
+  }
 
   private createLineChart(): void {
-    new Chart(this.elemento.nativeElement, {
+    new Chart(this.element.nativeElement, {
       type: 'line',
       data: {
         labels: this.chartData.stockDates,
@@ -45,6 +47,7 @@ export class QuoteChartComponent {
                     currency: 'BRL',
                   }).format(context.parsed.y);
                 }
+                // Aqui se coloca as labels da variação do preço da ação.
                 if (context.dataIndex !== 0) {
                   let previousValue = Number(
                     context.dataset.data[context.dataIndex - 1]
