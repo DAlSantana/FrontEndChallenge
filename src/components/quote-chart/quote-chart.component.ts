@@ -7,7 +7,7 @@ import { ChartDto } from 'src/models/chartDto';
   styleUrls: ['./quote-chart.component.scss'],
 })
 export class QuoteChartComponent {
-  @Input() chartData: ChartDto;
+  @Input() chartDto: ChartDto;
 
   @ViewChild('canvas', { static: true }) element = {} as ElementRef;
 
@@ -21,10 +21,10 @@ export class QuoteChartComponent {
     new Chart(this.element.nativeElement, {
       type: 'line',
       data: {
-        labels: this.chartData.stockDates,
+        labels: this.chartDto.stockDates,
         datasets: [
           {
-            data: this.chartData.stockValues,
+            data: this.chartDto.stockValues,
             borderColor: '#000',
             fill: false,
             label: 'Variação',
