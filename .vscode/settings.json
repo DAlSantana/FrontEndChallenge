@@ -1,0 +1,6 @@
+{
+  "editor.suggest.shareSuggestSelections": true,
+  "files.associations": {
+    "*.css": "\"tailwindcss\""
+  }
+}
